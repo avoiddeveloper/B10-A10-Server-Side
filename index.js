@@ -76,6 +76,29 @@ async function run() {
             res.send(review)
         })
 
+        // Review - Update Review
+        app.patch("/updateReview/:id", async (req, res) => {
+            const id = req.params.id
+            const updateDoc = req.body;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true }
+            const updatedUser = {
+                $set: {
+                    thumbnailURL: updateDoc.thumbnailURL,
+                    gameTitle: updateDoc.gameTitle,
+                    reviewDescription: updateDoc.reviewDescription,
+                    publishDate: updateDoc.publishDate,
+                    rating: updateDoc.rating,
+                    genres: updateDoc.genres
+                }
+            }
+            const result = await reviewCollection.updateOne(filter, updatedUser, options)
+
+            res.send(result)
+
+        })
+
+
 
 
         // Send a ping to confirm a successful connection
