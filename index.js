@@ -78,7 +78,7 @@ async function run() {
 
         // Review - Update Review
         app.patch("/updateReview/:id", async (req, res) => {
-            const id = req.params.id
+            const id = req.params.id;
             const updateDoc = req.body;
             const filter = { _id: new ObjectId(id) }
             const options = { upsert: true }
@@ -93,9 +93,15 @@ async function run() {
                 }
             }
             const result = await reviewCollection.updateOne(filter, updatedUser, options)
-
             res.send(result)
+        })
 
+        // Review - Delete Review
+        app.delete("/deleteReview/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await reviewCollection.deleteOne(query)
+            res.send(result);
         })
 
 
