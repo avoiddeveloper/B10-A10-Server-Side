@@ -30,6 +30,7 @@ async function run() {
         const popularGameCollection = client.db("gameDB").collection("games");
         const reviewCollection = client.db("reviewDB").collection("reviews");
         const userCollection = client.db("userDB").collection("user");
+        const wlCollection = client.db("watchLaterDB").collection("item");
 
         // Read
         app.get('/popularGames', async (req, res) => {
@@ -108,6 +109,13 @@ async function run() {
         app.get('/users', async (req, res) => {
             const cursor = userCollection.find();
             const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        // Create WatchList
+        app.post("/watchList", async (req, res) => {
+            const id = req.body;
+            const result = await wlCollection.insertOne(id);
             res.send(result)
         })
 
