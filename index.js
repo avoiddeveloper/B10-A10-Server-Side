@@ -9,10 +9,6 @@ const port = process.env.PORT || 5000
 app.use(cors())
 app.use(express.json())
 
-// chill-gamer
-// 6OcQ8qx1Vz4iFpqU
-
-
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rsvt6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -25,10 +21,6 @@ const client = new MongoClient(uri, {
     }
 });
 
-const doc = {
-    title: "Record of a Shriveled Datum",
-    content: "No bytes, no problem. Just insert a document, in MongoDB",
-}
 
 async function run() {
     try {
@@ -37,6 +29,7 @@ async function run() {
 
         const popularGameCollection = client.db("gameDB").collection("games");
         const reviewCollection = client.db("reviewDB").collection("reviews");
+        const userCollection = client.db("userDB").collection("user");
 
         // Read
         app.get('/popularGames', async (req, res) => {
@@ -102,6 +95,20 @@ async function run() {
             const query = { _id: new ObjectId(id) };
             const result = await reviewCollection.deleteOne(query)
             res.send(result);
+        })
+
+        // User - Create User
+        app.post("/user", async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            res.send(result)
+        })
+
+        // User - Read All 
+        app.get('/users', async (req, res) => {
+            const cursor = userCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
         })
 
 
